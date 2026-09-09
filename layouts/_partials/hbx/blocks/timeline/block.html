@@ -1,0 +1,207 @@
+{{/* Custom Blox: Timeline
+
+     Experience 블록(resume-experience)과 동일한 타임라인 디자인을 사용하되,
+     데이터를 author 프로필이 아니라 `content.items`에서 직접 읽습니다.
+     (resume-experience 는 data/authors/me.yaml 만 읽기 때문에 재사용할 수 없습니다.)
+
+     사용 예:
+       - block: timeline
+         id: activities
+         content:
+           title: Activities
+           items:
+             - title: 제목
+               org: 소속/주관                                  (선택)
+               date: "2025.07 ~ 2025.08"                       (선택, 자유 텍스트)
+               summary: 설명                                    (선택, 마크다운)
+               tags: [태그1, 태그2]                              (선택)
+               icon: hero/trophy                                (선택)
+               button: { text: 링크, url: "https://...", icon: hero/link }   (선택)
+         design:
+           color: primary                                       (primary | secondary)
+*/}}
+
+{{ $page := .wcPage }}
+{{ $block := .wcBlock }}
+{{ $content := $block.content }}
+{{ if not (reflect.IsMap $content) }}{{ $content = dict }}{{ end }}
+{{ $design := $block.design }}
+{{ if not (reflect.IsMap $design) }}{{ $design = dict }}{{ end }}
+
+{{ $title := "" }}
+{{ with index $content "title" }}{{ $title = strings.TrimSpace (printf "%v" .) }}{{ end }}
+
+{{ $text := "" }}
+{{ with index $content "text" }}{{ $text = strings.TrimSpace (printf "%v" .) }}{{ end }}
+
+{{/* 색상 계열.
+     Tailwind 는 클래스 문자열을 정적으로 스캔하므로 `bg-{{ $c }}-500` 같은 조립을
+     인식하지 못합니다. 그래서 분기마다 완성된 클래스를 그대로 적어 둡니다. */}}
+{{ $color := "primary" }}
+{{ with index $design "color" }}{{ $color = lower (strings.TrimSpace (printf "%v" .)) }}{{ end }}
+{{ $is_secondary := eq $color "secondary" }}
+
+{{ $rail := cond $is_secondary
+  "absolute left-4 sm:left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-secondary-500 via-secondary-400 to-secondary-600/50"
+  "absolute left-4 sm:left-6 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary-500 via-primary-400 to-primary-600/50" }}
+{{ $glow := cond $is_secondary
+  "absolute inset-0 w-8 h-8 bg-secondary-500/30 rounded-full blur-md group-hover:bg-secondary-500/50 transition-all duration-300"
+  "absolute inset-0 w-8 h-8 bg-primary-500/30 rounded-full blur-md group-hover:bg-primary-500/50 transition-all duration-300" }}
+{{ $dot := cond $is_secondary
+  "relative w-8 h-8 bg-white dark:bg-gray-900 border-2 border-secondary-500 rounded-full flex items-center justify-center group-hover:border-secondary-400 group-hover:scale-110 transition-all duration-300"
+  "relative w-8 h-8 bg-white dark:bg-gray-900 border-2 border-primary-500 rounded-full flex items-center justify-center group-hover:border-primary-400 group-hover:scale-110 transition-all duration-300" }}
+{{ $icon_attrs := cond $is_secondary
+  "class='w-4 h-4 text-secondary-600 dark:text-secondary-400'"
+  "class='w-4 h-4 text-primary-600 dark:text-primary-400'" }}
+{{ $card := cond $is_secondary
+  "relative bg-white dark:bg-white/[0.02] backdrop-blur-sm rounded-xl border border-gray-200 dark:border-white/[0.06] p-6 hover:bg-gray-50 dark:hover:bg-white/[0.04] hover:border-secondary-300 dark:hover:border-secondary-500/30 transition-all duration-300 group-hover:translate-x-1 shadow-sm dark:shadow-none"
+  "relative bg-white dark:bg-white/[0.02] backdrop-blur-sm rounded-xl border border-gray-200 dark:border-white/[0.06] p-6 hover:bg-gray-50 dark:hover:bg-white/[0.04] hover:border-primary-300 dark:hover:border-primary-500/30 transition-all duration-300 group-hover:translate-x-1 shadow-sm dark:shadow-none" }}
+{{ $heading := cond $is_secondary
+  "text-xl font-bold text-gray-900 dark:text-white group-hover:text-secondary-600 dark:group-hover:text-secondary-400 transition-colors"
+  "text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors" }}
+{{ $org_class := cond $is_secondary
+  "text-secondary-600 dark:text-secondary-400 font-medium mt-1"
+  "text-primary-600 dark:text-primary-400 font-medium mt-1" }}
+{{ $tag_class := cond $is_secondary
+  "px-2.5 py-1 text-xs font-medium rounded-full bg-secondary-100 dark:bg-secondary-500/10 text-secondary-700 dark:text-secondary-300 border border-secondary-200 dark:border-secondary-500/20"
+  "px-2.5 py-1 text-xs font-medium rounded-full bg-primary-100 dark:bg-primary-500/10 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-500/20" }}
+{{ $link_class := cond $is_secondary
+  "inline-flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-secondary-600 dark:hover:text-secondary-400 transition-colors"
+  "inline-flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors" }}
+
+{{/* items 정규화 */}}
+{{ $items_raw := index $content "items" }}
+{{ $items := slice }}
+{{ if reflect.IsSlice $items_raw }}
+  {{ range $items_raw }}
+    {{ if reflect.IsMap . }}
+      {{ $t := "" }}{{ with index . "title" }}{{ $t = strings.TrimSpace (printf "%v" .) }}{{ end }}
+      {{ $o := "" }}{{ with index . "org" }}{{ $o = strings.TrimSpace (printf "%v" .) }}{{ end }}
+      {{ $d := "" }}{{ with index . "date" }}{{ $d = strings.TrimSpace (printf "%v" .) }}{{ end }}
+      {{ $s := "" }}{{ with index . "summary" }}{{ $s = strings.TrimSpace (printf "%v" .) }}{{ end }}
+      {{ $ic := "" }}{{ with index . "icon" }}{{ $ic = strings.TrimSpace (printf "%v" .) }}{{ end }}
+      {{ $tg := slice }}
+      {{ $tg_raw := index . "tags" }}
+      {{ if reflect.IsSlice $tg_raw }}
+        {{ range $tg_raw }}
+          {{ $one := strings.TrimSpace (printf "%v" .) }}
+          {{ if $one }}{{ $tg = $tg | append $one }}{{ end }}
+        {{ end }}
+      {{ end }}
+      {{ $bu := "" }}{{ $bt := "" }}{{ $bi := "" }}
+      {{ $b_raw := index . "button" }}
+      {{ if reflect.IsMap $b_raw }}
+        {{ with index $b_raw "url" }}{{ $bu = strings.TrimSpace (printf "%v" .) }}{{ end }}
+        {{ with index $b_raw "text" }}{{ $bt = strings.TrimSpace (printf "%v" .) }}{{ end }}
+        {{ with index $b_raw "icon" }}{{ $bi = strings.TrimSpace (printf "%v" .) }}{{ end }}
+      {{ end }}
+      {{ if $t }}
+        {{ $items = $items | append (dict "title" $t "org" $o "date" $d "summary" $s "icon" $ic "tags" $tg "button" (dict "url" $bu "text" $bt "icon" $bi)) }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{ if gt (len $items) 0 }}
+<div class="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+  <div class="w-full">
+
+    {{ with $title }}
+    <h2 class="mb-4 text-3xl font-bold text-gray-900 dark:text-white text-center">{{ . | markdownify | emojify }}</h2>
+    {{ end }}
+
+    {{ with $text }}
+    <p class="mb-10 text-center text-gray-600 dark:text-gray-400">{{ . | markdownify | emojify }}</p>
+    {{ else }}
+    <div class="mb-10"></div>
+    {{ end }}
+
+    <div class="relative">
+      {{/* 그라데이션 타임라인 라인 */}}
+      <div class="{{ $rail }}"></div>
+
+      <div class="space-y-8">
+        {{ range $items }}
+        <div class="group relative pl-12 sm:pl-16">
+
+          {{/* 타임라인 마커 */}}
+          <div class="absolute left-0 sm:left-2 top-6 flex items-center justify-center">
+            <div class="relative">
+              <div class="{{ $glow }}"></div>
+              <div class="{{ $dot }}">
+                {{ $icon := index . "icon" | default "hero/sparkles" }}
+                {{ partial "functions/get_icon" (dict "name" $icon "attributes" $icon_attrs) }}
+              </div>
+            </div>
+          </div>
+
+          {{/* 카드 */}}
+          <div class="{{ $card }}">
+
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 {{ if or (index . "summary") (index . "tags") }}mb-3{{ end }}">
+              <div>
+                <h3 class="{{ $heading }}">{{ index . "title" | markdownify | emojify }}</h3>
+                {{ with index . "org" }}
+                <p class="{{ $org_class }}">{{ . | markdownify | emojify }}</p>
+                {{ end }}
+              </div>
+
+              {{/* 날짜는 값이 있을 때만 표시 (자격증처럼 날짜가 없으면 배지 자체를 숨김) */}}
+              {{ with index . "date" }}
+              <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <time>{{ . }}</time>
+              </div>
+              {{ end }}
+            </div>
+
+            {{ with index . "summary" }}
+            <div class="prose dark:prose-invert max-w-none text-gray-600 dark:text-gray-400 leading-relaxed">
+              {{ . | emojify | $page.RenderString }}
+            </div>
+            {{ end }}
+
+            {{ with index . "tags" }}
+            <div class="flex flex-wrap gap-2 mt-4">
+              {{ range . }}<span class="{{ $tag_class }}">{{ . }}</span>{{ end }}
+            </div>
+            {{ end }}
+
+            {{ $button := index . "button" }}
+            {{ if reflect.IsMap $button }}
+              {{ $button_url := index $button "url" }}
+              {{ if $button_url }}
+                {{ $button_text := index $button "text" | default "Learn more" }}
+                {{ $button_icon := index $button "icon" }}
+                {{ $button_link := $button_url }}
+                {{ $button_target := "" }}
+                {{ $scheme := (urls.Parse $button_link).Scheme }}
+                {{ if not $scheme }}
+                  {{ if not (hasPrefix $button_link "#") }}{{ $button_link = $button_link | relLangURL }}{{ end }}
+                  {{ if eq (path.Ext $button_link) ".pdf" }}{{ $button_target = "target=\"_blank\" rel=\"noopener\"" }}{{ end }}
+                {{ else if in (slice "http" "https") $scheme }}
+                  {{ $button_target = "target=\"_blank\" rel=\"noopener\"" }}
+                {{ end }}
+                <div class="mt-4 pt-4 border-t border-gray-100 dark:border-white/5">
+                  <a href="{{ $button_link | safeURL }}" {{ $button_target | safeHTMLAttr }} class="{{ $link_class }}">
+                    {{ with $button_icon }}{{ partial "functions/get_icon" (dict "name" . "attributes" "class='w-4 h-4'") }}{{ end }}
+                    {{ $button_text }}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </a>
+                </div>
+              {{ end }}
+            {{ end }}
+
+          </div>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+
+  </div>
+</div>
+{{ end }}
