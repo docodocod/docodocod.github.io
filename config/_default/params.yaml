@@ -88,7 +88,7 @@ hugoblox:
     align: center                       # left | center | right
     # Brand text shown top-left (defaults to identity.name).
     # 역할 배지 "Backend Engineer" 는 assets/css/custom.css 에서 ::after 로 붙입니다.
-    title: "docodocod"
+    title: "Kim Dongan"
     # Feature toggles
     search: true
     theme_toggle: true
