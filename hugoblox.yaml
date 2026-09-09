@@ -1,5 +1,8 @@
 build:
-  hugo_version: '0.162.0'
+  # 0.162.0 에서는 테마의 build_links.html 이 `dict` 로 만든 빈 맵에
+  # SetInMap 을 호출하다 "assignment to entry in nil map" 으로 죽습니다.
+  # (links 프론트매터가 있는 페이지에서 발생) 로컬과 동일한 버전으로 고정합니다.
+  hugo_version: '0.165.0'
 deploy:
   # Deployment target: github-pages, netlify, vercel, cloudflare, or none
   host: 'github-pages'
