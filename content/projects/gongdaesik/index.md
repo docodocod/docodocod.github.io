@@ -29,24 +29,21 @@ links:
   - type: github
     url: https://github.com/docodocod/gongdaesik
     label: Code
-  - type: link
-    url: https://gongdaesik.kro.kr
-    label: 서비스
 featured: true
-status: "운영 중"
+status: "완료"
 role: "1인 개발 (기획·백엔드·프론트·인프라)"
 duration: "2026.05 ~ 2026.06"
 team_size: 1
 highlights:
   - "이미지 뷰어에서 학식 데이터 자동 수집·구조화"
-  - "알림 발송 100초 → 2초 (구독 100건 기준)"
+  - "알림 발송 병렬화로 이벤트 루프 블로킹 제거"
   - "3계층 캐시로 재방문 즉시 렌더"
   - "1인으로 기획부터 운영까지"
 ---
 
 학교 학식표는 iBook 자바스크립트 뷰어가 JPG 이미지로만 제공해서, HTML을 긁어도 텍스트가 나오지 않습니다. 매주 사람이 손으로 옮겨 적지 않으면 데이터가 채워지지 않는 구조였습니다.
 
-**이미지를 자동으로 수집해 AI로 파싱하고, 매일 오전 8시 Web Push로 오늘의 식단을 보내주는 PWA**를 1인으로 만들어 운영 중입니다.
+**이미지를 자동으로 수집해 AI로 파싱하고, 매일 오전 8시 Web Push로 오늘의 식단을 보내주는 PWA**를 1인으로 만들었습니다. 현재는 서버를 내린 상태입니다.
 
 ## 개요
 
@@ -55,7 +52,6 @@ highlights:
 | 기간 | 2026.05 ~ 2026.06 (총 60커밋) |
 | 역할 | 1인 — 기획 · 백엔드 · 프론트엔드 · 인프라/배포 전 영역 |
 | 저장소 | [docodocod/gongdaesik](https://github.com/docodocod/gongdaesik) |
-| 서비스 | [gongdaesik.kro.kr](https://gongdaesik.kro.kr) |
 
 **기술 스택**
 
@@ -376,8 +372,9 @@ is_gone = status == 410 or "410" in str(e)
 
 | 항목 | 개선 전 | 개선 후 |
 |---|---|---|
-| 발송 방식 | 구독별 순차, 동기 호출로 이벤트 루프 블로킹 | `to_thread` + `Semaphore(20)` 병렬 |
-| 발송 시간 (구독 100건) | 100초 | **2초** |
+| 발송 방식 | 구독별 순차 | `Semaphore(20)` 로 상한을 둔 병렬 발송 |
+| 이벤트 루프 | 동기 호출로 발송 내내 블로킹 | `to_thread` 로 분리, 발송 중에도 API 응답 |
+| 전체 발송 시간 | 구독 수에 선형 비례 | 구독 수 ÷ 20 에 비례 |
 | 만료 구독 | 410 미감지로 DB 잔존, 매일 실패 요청 반복 | 발송 결과에서 수집해 일괄 DELETE |
 
 ### 5. 서버가 UTC라서 아침에 "어제 식단"이 보이던 버그
