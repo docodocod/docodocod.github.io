@@ -38,7 +38,7 @@ outputs:
 imaging:
   resampleFilter: lanczos
   quality: 90
-  anchor: smart
+  anchor: center
   hint: picture
 timeout: 600000
 taxonomies:
