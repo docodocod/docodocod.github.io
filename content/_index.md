@@ -64,7 +64,8 @@ sections:
           tag: AI/Data
       default_button_index: 0
     design:
-      columns: 3
+      # 2열로 두어 카드(=이미지) 가로폭을 넓힘. 3이면 lg 에서 3열이 됩니다.
+      columns: 2
       background:
         color:
           light: "#ffffff"
