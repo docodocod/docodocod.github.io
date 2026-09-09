@@ -113,3 +113,20 @@
   height: auto;
   aspect-ratio: 3 / 2;
 }
+
+/* ── 프로젝트 카드 음영 제거 ──────────────────────────────────────────────
+   테마가 카드에 음영을 세 겹 얹습니다.
+     1) 이미지 위 검은 그라데이션 오버레이 (from-gray-900/90 → transparent)
+     2) hover 시 Tailwind 그림자 (hover:shadow-xl)
+     3) .card-hover-lift:hover 의 box-shadow
+   1번은 순수 장식입니다. 제목·요약이 이미지 아래 별도 영역에 있어
+   가독성 목적이 아니므로 지워도 안전합니다.
+   들어올림(translateY) 효과는 그대로 둡니다.                              */
+#projects .relative.h-48 > .absolute.inset-0.bg-gradient-to-t {
+  display: none;
+}
+
+#projects .card-hover-lift,
+#projects .card-hover-lift:hover {
+  box-shadow: none;
+}
