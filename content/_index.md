@@ -268,28 +268,6 @@ sections:
           light: "#f5f5f5"
           dark: "#08080c"
       spacing:
-        padding: ["4rem", "0", "4rem", "0"]
-
-  # CTA Card
-  - block: cta-card
-    content:
-      title: "함께 일할 기회를 찾고 있습니다"
-      text: |-
-        2027년 2월 졸업 예정으로, **백엔드 엔지니어** 포지션을 찾고 있습니다.
-
-        이력서에서 각 프로젝트의 문제 정의와 개선 과정을 더 자세히 보실 수 있습니다.
-      button:
-        text: '이력서 다운로드'
-        url: uploads/resume.pdf
-        new_tab: true
-    design:
-      card:
-        css_class: 'bg-gradient-to-br from-primary-200 via-primary-100 to-secondary-200 dark:from-primary-600 dark:via-primary-700 dark:to-secondary-700'
-        text_color: dark
-      background:
-        color:
-          light: "#ffffff"
-          dark: "#0d0d12"
-      spacing:
         padding: ["4rem", "0", "6rem", "0"]
+
 ---
