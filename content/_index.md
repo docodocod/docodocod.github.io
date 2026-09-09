@@ -64,8 +64,9 @@ sections:
           tag: AI/Data
       default_button_index: 0
     design:
-      # 2열로 두어 카드(=이미지) 가로폭을 넓힘. 3이면 lg 에서 3열이 됩니다.
-      columns: 2
+      # lg 에서 3열. 2로 두면 카드가 넓어집니다.
+      # 이미지 칸 비율(3:2)은 assets/css/custom.css 에서 맞춥니다.
+      columns: 3
       background:
         color:
           light: "#ffffff"
