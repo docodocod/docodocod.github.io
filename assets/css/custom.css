@@ -126,7 +126,19 @@
   display: none;
 }
 
+/* 카드 음영은 Experience 카드(resume-experience)와 같은 결로 맞춥니다.
+   라이트: Tailwind shadow-sm 과 동일한 값.
+           라이트에서는 섹션 배경(#ffffff)과 카드 배경(bg-white)이 같은 흰색이라
+           이 그림자가 사실상 카드의 경계선 역할을 합니다.
+   다크  : Experience 와 동일하게 그림자 없음 (dark:shadow-none).
+           다크에서는 카드 배경 bg-white/[0.03] 과 테두리로 이미 구분됩니다.
+   테마 기본값이던 hover 시 커지는 큰 그림자는 계속 끕니다.              */
 #projects .card-hover-lift,
 #projects .card-hover-lift:hover {
+  box-shadow: 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a;
+}
+
+.dark #projects .card-hover-lift,
+.dark #projects .card-hover-lift:hover {
   box-shadow: none;
 }
