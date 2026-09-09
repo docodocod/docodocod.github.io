@@ -6,14 +6,14 @@
 # Website name (set in params.yaml under hugoblox.branding.name)
 title: ''
 # Website URL
-baseURL: 'https://example.com/'
+baseURL: 'https://docodocod.github.io/'
 
 ############################
 ## LANGUAGE
 ############################
 
 defaultContentLanguage: en
-hasCJKLanguage: false
+hasCJKLanguage: true
 defaultContentLanguageInSubdir: false
 removePathAccents: true
 
@@ -50,6 +50,13 @@ markup:
   highlight:
     lineNos: false
 security:
-  _merge: deep
+  exec:
+    allow:
+      - '^(dart-)?sass$'
+      - '^go$'
+      - '^git$'
+      - '^node$'
+      - '^postcss$'
+      - '^tailwindcss$'
 sitemap:
   _merge: deep

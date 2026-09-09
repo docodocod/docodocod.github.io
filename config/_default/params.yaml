@@ -13,18 +13,18 @@ hugoblox:
   # ────────────────────────────────────────────────────────────────────────────
   identity:
     # Site name - shown in navbar, footer, copyright, and browser title by default
-    name: "Your Name"
+    name: "김동안"
     # Legal entity for copyright notices (defaults to name if not set)
     organization: ""
     # Schema.org type for structured data
     type: person                        # person | organization | local_business
     # Short tagline displayed on your site
-    tagline: "Full-Stack Developer"
+    tagline: "Backend Engineer"
     # Site meta description for search engines and social sharing
-    description: "Modern developer portfolio showcasing web development projects, technical blog posts, and open source contributions. Built with Hugo Blox."
+    description: "백엔드 개발자 김동안의 포트폴리오. 동시성 제어, 성능 병목 분석, 비동기·분산 처리 파이프라인 설계 경험을 프로젝트별 문제 정의와 개선 수치로 정리했습니다."
     # Social accounts (used for meta tags like Twitter Cards)
     social:
-      twitter: "yourusername"              # Twitter/X handle for Twitter Cards (without @)
+      twitter: ""              # Twitter/X handle for Twitter Cards (without @)
 
   # ────────────────────────────────────────────────────────────────────────────
   # THEME
@@ -86,6 +86,9 @@ hugoblox:
     sticky: true
     # Menu alignment
     align: center                       # left | center | right
+    # Brand text shown top-left (defaults to identity.name).
+    # 역할 배지 "Backend Engineer" 는 assets/css/custom.css 에서 ::after 로 붙입니다.
+    title: "docodocod"
     # Feature toggles
     search: true
     theme_toggle: true

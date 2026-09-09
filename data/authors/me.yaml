@@ -2,99 +2,122 @@ schema: hugoblox/author/v1
 slug: me
 is_owner: true
 name:
-  display: Alex Johnson
-  given: Alex
-  family: Johnson
+  display: Kim Dong an
+  given: 동안
+  family: 김
 postnominals: []
 status:
-  icon: "💻"  # Emoji shown on avatar badge: 💻 developer, 🎨 designer, 🚀 startup, 🔬 researcher, 🎓 student
-role: Full-Stack Developer
-email: alex@example.com
+  icon: "💻"
+role: Backend Engineer
+email: dongan0618@naver.com
 bio: |
-  Full-stack developer with 5+ years of experience building scalable web applications.
-  Passionate about modern JavaScript, cloud architecture, and creating delightful user experiences.
+  요구사항 구현에 그치지 않고 실제 요청 흐름을 분석해 동시성·성능·외부 시스템 연동에서 발생하는 문제를
+  구조적으로 개선해 온 백엔드 개발자입니다. 문제가 생기면 구현 결과만 확인하는 것이 아니라
+  요청 흐름과 데이터 접근, 외부 의존성을 분석하고 성능 측정과 테스트로 개선 효과를 검증합니다.
 
 affiliations:
-  - name: Tech Corp
-    url: https://techcorp.example.com
+  - name: 한국공학대학교 컴퓨터공학부
+    url: https://www.tukorea.ac.kr/
 
 links:
   - icon: at-symbol
-    url: mailto:alex@example.com
-    label: E-mail Me
+    url: mailto:dongan0618@naver.com
+    label: E-mail
   - icon: brands/github
-    url: https://github.com/alexjohnson
-  - icon: brands/linkedin
-    url: https://www.linkedin.com/in/alexjohnson/
-  - icon: brands/x
-    url: https://x.com/alexjohnson
+    url: https://github.com/docodocod
+    label: GitHub
+  - icon: pencil-square
+    url: https://velog.io/@ehddk0618
+    label: Velog
+  - icon: document-arrow-down
+    url: uploads/resume.pdf
+    label: Resume
 
 interests:
-  - Web Development
-  - Cloud Architecture
-  - Open Source
-  - Developer Experience
+  - 동시성 제어와 성능 최적화
+  - 비동기·분산 처리 파이프라인
+  - LLM 연동 백엔드 아키텍처
+  - 관측 가능성(Observability)
 
 education:
-  - degree: B.S. Computer Science
-    institution: State University
-    start: 2015-09-01
-    end: 2019-05-31
+  - degree: 컴퓨터공학부 소프트웨어전공
+    institution: 한국공학대학교
+    start: 2025-03-01
+    end: 2027-02-28
     summary: |
-      Focus on software engineering and distributed systems.
-      Senior project on distributed caching systems.
-    button:
-      text: View Project
-      url: https://github.com/alexjohnson/senior-project
-      icon: brands/github
+      2027년 2월 졸업 예정.
 
 experience:
-  - role: Senior Software Engineer
-    org: Tech Corp
-    start: 2023-01-01
+  - role: 백엔드 개발 인턴 (미래내일 일경험)
+    org: 동그라미소프트
+    start: 2026-06-01
+    end: 2026-09-30
+    icon: hero/server-stack
+    tags:
+      - Spring
+      - 예외 모니터링
+      - 풀스택
     summary: |
-      Lead development of microservices architecture serving 1M+ users.
-      Improved API response time by 40% through optimization.
-      Mentored team of 5 junior developers.
-  - role: Full-Stack Developer
-    org: Startup Inc
-    start: 2021-06-01
-    end: 2022-12-31
-    summary: |
-      Built and deployed 3 production applications from scratch.
-      Implemented CI/CD pipeline reducing deployment time by 60%.
-      Led migration from monolith to microservices architecture.
-  - role: Junior Developer
-    org: Web Agency
-    start: 2020-01-01
-    end: 2021-05-31
-    summary: |
-      Developed client websites using React and modern web technologies.
-      Participated in code reviews and agile ceremonies.
+      **EHS 솔루션 WAS 예외 로그 모니터링 시스템 구축**
 
+      - 기존 코드베이스를 전수 조사해 서버 예외가 DB에 적재되지 않는 현황을 파악하고,
+        ErrorController 단일 빈 제약·기존 인터셉터 인증 흐름 등 아키텍처 제약을 코드로 확인한 뒤
+        기존 구조를 깨지 않는 방향으로 예외 적재 시스템을 설계·구현
+      - `@ControllerAdvice`가 커버하지 못하는 인터셉터(401/403), 서블릿 컨테이너(`/error` forward)
+        계층까지 예외 캡처 범위를 확장해 누락 없는 수집 구조를 구성
+
+      **EHS 솔루션 풀스택 기능 개발 및 운영 유지보수**
+
+      - 방문신청 삭제·반려 사유, 협력사 조회 누락 보정, 개인정보 마스킹 등
+        운영 요구사항 분석·구현 및 QA 진행
+  - role: 현장실습 (AI 개발)
+    org: 그루크리에이티브랩
+    start: 2025-12-01
+    end: 2026-02-28
+    icon: hero/sparkles
+    tags:
+      - RAG
+      - 벡터 DB
+      - LLaMA3
+    summary: |
+      **AI 기반 미디어 콘텐츠 생성 프로젝트**
+
+      - 특정 아티스트의 가사를 구간 단위로 분절하고 문장별 키워드를 임베딩해 벡터 DB 구축
+      - 입력 키워드 기반 유사도 검색으로 가사 구간을 retrieve 해 LLaMA3로 생성하는
+        RAG 파이프라인 구현
+      - Suno AI API와 연동해 생성된 가사를 음원으로 출력하는 자동화 워크플로우 구현
+
+# 이력서에 숙련도 근거가 없어 level 점수는 넣지 않았습니다.
+# 별점을 표시하려면 각 항목에 `level: 1~5`를 추가하고 홈의 tech-stack 블록에서 show_levels: true로 바꾸세요.
 skills:
-  - name: Development
+  - name: Languages
     items:
-      - label: TypeScript
-        level: 5
-      - label: React
-        level: 5
-      - label: Node.js
-        level: 5
+      - label: Java
       - label: Python
-        level: 4
-  - name: DevOps
+      - label: JavaScript
+  - name: Frameworks
+    items:
+      - label: Spring Boot
+      - label: FastAPI
+  - name: Databases & MQ
+    items:
+      - label: PostgreSQL
+      - label: MySQL
+      - label: Neo4j
+      - label: Redis
+      - label: RabbitMQ
+      - label: Kafka
+  - name: Infra & DevOps
     items:
       - label: Docker
-        level: 4
+      - label: Nginx
+      - label: GitHub Actions
       - label: AWS
-        level: 4
-      - label: CI/CD
-        level: 5
+      - label: GCP
 
 languages:
-  - name: English
+  - name: 한국어
     level: 5
-    label: Native
+    label: 원어민
 
 awards: []
