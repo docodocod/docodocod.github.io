@@ -1,0 +1,29 @@
+{{/* 마크다운 표 렌더 훅.
+
+     테마 기본 표는 가로 스크롤 컨테이너가 없어서, 열이 3개이고 셀에 긴 한글
+     문장이 들어가면 좁은 화면에서 열이 짓눌리고 글자가 잘게 줄바꿈됩니다.
+     표를 스크롤 가능한 래퍼로 감싸고, 스타일은 assets/css/custom.css 의
+     .table-wrap 에서 처리합니다. */}}
+<div class="table-wrap">
+  <table
+    {{- range $k, $v := .Attributes }}{{ if $v }} {{ $k }}="{{ $v }}"{{ end }}{{ end }}>
+    <thead>
+      {{- range .THead }}
+      <tr>
+        {{- range . }}
+        <th{{ with .Alignment }} style="text-align:{{ . }}"{{ end }}>{{ .Text }}</th>
+        {{- end }}
+      </tr>
+      {{- end }}
+    </thead>
+    <tbody>
+      {{- range .TBody }}
+      <tr>
+        {{- range . }}
+        <td{{ with .Alignment }} style="text-align:{{ . }}"{{ end }}>{{ .Text }}</td>
+        {{- end }}
+      </tr>
+      {{- end }}
+    </tbody>
+  </table>
+</div>

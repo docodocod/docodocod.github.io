@@ -142,3 +142,179 @@
 .dark #projects .card-hover-lift:hover {
   box-shadow: none;
 }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   표 가독성
+   테마 표에는 가로 스크롤 컨테이너가 없어, 3열에 긴 한글 문장이 들어가면
+   열이 짓눌리고 글자가 잘게 줄바꿈됩니다. layouts/_markup/render-table.html
+   에서 .table-wrap 으로 감싸고 여기서 스타일을 줍니다.
+   ══════════════════════════════════════════════════════════════════════════ */
+.prose .table-wrap {
+  overflow-x: auto;
+  margin: 2em 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose .table-wrap > table {
+  margin: 0;
+  min-width: 34rem;          /* 이보다 좁아지면 찌그러지는 대신 스크롤 */
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.prose .table-wrap th,
+.prose .table-wrap td {
+  padding: 0.7rem 1rem;
+  vertical-align: top;
+  word-break: keep-all;      /* 한글을 단어 단위로 줄바꿈 */
+}
+
+/* 첫 열은 항목명이라 줄바꿈 없이 붙여 두면 표가 훨씬 잘 읽힙니다 */
+.prose .table-wrap td:first-child {
+  white-space: nowrap;
+  font-weight: 500;
+  color: var(--tw-prose-headings);
+}
+
+.prose .table-wrap thead th {
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+/* 열 구분선 — 가로줄만 있으면 3열 비교표에서 어느 칸인지 눈이 놓칩니다 */
+.prose .table-wrap th:not(:last-child),
+.prose .table-wrap td:not(:last-child) {
+  border-right: 1px solid var(--tw-prose-td-borders);
+}
+
+.prose .table-wrap tbody tr:nth-child(odd) {
+  background: color-mix(in srgb, currentColor 3%, transparent);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   성능 수치 시각화
+   ══════════════════════════════════════════════════════════════════════════ */
+.perf {
+  --perf-bar: #2563eb;              /* 라이트: validate_palette PASS */
+  --perf-ink: #1f2937;
+  --perf-muted: #6b7280;
+  --perf-grid: #e5e7eb;
+  --perf-surface: #ffffff;
+  margin: 2em 0;
+}
+
+.dark .perf {
+  --perf-bar: #3b82f6;              /* 다크: validate_palette PASS */
+  --perf-ink: #e5e7eb;
+  --perf-muted: #9ca3af;
+  --perf-grid: rgba(255, 255, 255, 0.14);
+  --perf-surface: #0d0d12;
+}
+
+/* 단일 수치는 막대 두 개보다 스탯 타일이 정확합니다.
+   (12,587 대비 245 는 막대로 그리면 2% 길이라 읽을 수 없습니다) */
+.perf-hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem 1.75rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--perf-grid);
+  border-radius: 0.75rem;
+}
+
+.perf-hero__item { display: flex; flex-direction: column; gap: 0.25rem; }
+
+.perf-hero__label {
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--perf-muted);
+}
+
+.perf-hero__value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--perf-ink);
+}
+
+.perf-hero__value--before {
+  color: var(--perf-muted);
+  font-weight: 600;
+}
+
+.perf-hero__value--after { color: var(--perf-bar); }
+
+.perf-hero__unit {
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-left: 0.15rem;
+  color: var(--perf-muted);
+}
+
+.perf-hero__arrow {
+  font-size: 1.25rem;
+  color: var(--perf-muted);
+}
+
+.perf-hero__delta {
+  margin-left: auto;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--perf-bar);
+  border: 1px solid color-mix(in srgb, var(--perf-bar) 35%, transparent);
+  background: color-mix(in srgb, var(--perf-bar) 10%, transparent);
+}
+
+.perf-chart { margin-top: 1rem; }
+.perf-chart svg { width: 100%; height: auto; display: block; }
+.perf-chart .perf-bar { fill: var(--perf-bar); }
+.perf-chart .perf-axis { stroke: var(--perf-grid); }
+.perf-chart .perf-threshold { stroke: var(--perf-muted); stroke-dasharray: 4 4; }
+.perf-chart .perf-cat { fill: var(--perf-ink); font-size: 13px; }
+.perf-chart .perf-val { fill: var(--perf-ink); font-size: 13px; font-weight: 600; }
+.perf-chart .perf-note { fill: var(--perf-muted); font-size: 11px; }
+
+.perf-caption {
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--perf-muted);
+}
+
+/* 접히는 상세 블록 — 훑는 사람은 지나치고, 볼 사람만 펴게 */
+.prose details {
+  margin: 1.25em 0;
+  border: 1px solid var(--tw-prose-td-borders);
+  border-radius: 0.5rem;
+  padding: 0 1rem;
+}
+
+.prose details[open] { padding-bottom: 0.5rem; }
+
+.prose details > summary {
+  cursor: pointer;
+  padding: 0.7rem 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--tw-prose-headings);
+  list-style: none;
+}
+
+.prose details > summary::-webkit-details-marker { display: none; }
+
+.prose details > summary::before {
+  content: "▸";
+  display: inline-block;
+  margin-right: 0.5rem;
+  transition: transform 0.15s ease;
+  opacity: 0.6;
+}
+
+.prose details[open] > summary::before { transform: rotate(90deg); }
+
+.prose details > summary:hover { color: var(--perf-bar, #2563eb); }
